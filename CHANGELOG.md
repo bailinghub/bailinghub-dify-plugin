@@ -4,6 +4,12 @@ All notable changes to this independent adapter are documented here.
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-07-21
+
+### Fixed
+
+- Replaced the temporary plugin icon with the official BailingHub mark and safe padding for small Marketplace surfaces.
+
 ## [0.1.1] - 2026-07-21
 
 ### Changed
