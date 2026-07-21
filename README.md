@@ -24,6 +24,13 @@ Dify Agent or Workflow
 
 [Simplified Chinese](readme/README_zh_Hans.md)
 
+## Source and Support
+
+- Source: [github.com/bailinghub/bailinghub-dify-plugin](https://github.com/bailinghub/bailinghub-dify-plugin)
+- Bug reports and support: [GitHub Issues](https://github.com/bailinghub/bailinghub-dify-plugin/issues)
+- Security reports: use this repository's private Security Advisory channel as described in
+  [SECURITY.md](https://github.com/bailinghub/bailinghub-dify-plugin/blob/main/SECURITY.md).
+
 ## Project Boundary
 
 This repository is an independent integration adapter. It is not:
@@ -81,6 +88,9 @@ arguments.
 
 The plugin is an adapter to governance enforcement; it is not the final authorization
 boundary and does not make model output trustworthy.
+
+The plugin sends requests only to the BailingHub base URL configured by the Dify
+administrator. See [PRIVACY.md](PRIVACY.md) for the complete data-flow disclosure.
 
 ## Development
 

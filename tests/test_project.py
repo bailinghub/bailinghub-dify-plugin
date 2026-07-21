@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import subprocess
 import sys
+import zipfile
 from pathlib import Path
 
 import yaml
+
+from scripts.check_package import check_package
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -38,3 +41,27 @@ def test_project_boundary_check_passes() -> None:
     )
     assert result.returncode == 0, result.stderr
     assert result.stdout.startswith("PASS:")
+
+
+def test_package_audit_rejects_environment_files(tmp_path: Path) -> None:
+    package = tmp_path / "invalid.difypkg"
+    with zipfile.ZipFile(package, "w") as archive:
+        for required in (
+            "PRIVACY.md",
+            "README.md",
+            "_assets/icon.svg",
+            "main.py",
+            "manifest.yaml",
+            "provider/bailinghub.py",
+            "provider/bailinghub.yaml",
+            "requirements.txt",
+        ):
+            archive.writestr(required, "placeholder")
+        archive.writestr(".env.example", "SECRET=placeholder")
+
+    try:
+        check_package(package)
+    except AssertionError as exc:
+        assert "forbidden package file" in str(exc)
+    else:
+        raise AssertionError("package audit accepted an environment file")

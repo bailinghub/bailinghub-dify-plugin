@@ -34,3 +34,10 @@ jobs:
           mkdir -p dist
           /tmp/dify plugin package . --output_path dist/bailinghub.difypkg
           test -s dist/bailinghub.difypkg
+      - run: uv run python scripts/check_package.py dist/bailinghub.difypkg
+      - name: Upload audited plugin package
+        uses: actions/upload-artifact@v4
+        with:
+          name: bailinghub-dify-plugin
+          path: dist/bailinghub.difypkg
+          if-no-files-found: error

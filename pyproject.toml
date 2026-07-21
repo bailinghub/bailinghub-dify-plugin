@@ -1,6 +1,6 @@
 [project]
 name = "bailinghub-dify-plugin"
-version = "0.1.0"
+version = "0.1.1"
 description = "Dify Tool Plugin for a self-hosted BailingHub control plane"
 readme = "README.md"
 requires-python = ">=3.12"

@@ -4,6 +4,14 @@ All notable changes to this independent adapter are documented here.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-07-21
+
+### Changed
+
+- Reduced the distributable package to runtime and Marketplace-required files.
+- Clarified source, support, privacy, and Marketplace distribution boundaries.
+- Added an automated package-content audit for forbidden development state and executables.
+
 ## [0.1.0] - 2026-07-21
 
 ### Added
