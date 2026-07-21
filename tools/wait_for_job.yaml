@@ -1,6 +1,6 @@
 identity:
   name: wait_for_job
-  author: niejingchuan
+  author: bailinghub
   label:
     en_US: Wait for Governed Job
     zh_Hans: 等待受治理任务
