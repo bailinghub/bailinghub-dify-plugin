@@ -1,0 +1,60 @@
+identity:
+  name: get_job
+  author: niejingchuan
+  label:
+    en_US: Get Governed Job
+    zh_Hans: 查询受治理任务
+  icon: icon.svg
+
+description:
+  human:
+    en_US: Read the current status and result of a BailingHub job.
+    zh_Hans: 查询 BailingHub 任务的当前状态与结果。
+  llm: >-
+    Read a previously submitted BailingHub job. queued, running, and dispatched are
+    non-terminal. done is success. error and rejected are terminal failures.
+
+parameters:
+  - name: job_id
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Job ID
+      zh_Hans: 任务标识
+    human_description:
+      en_US: The job UUID returned by Submit Governed Job.
+      zh_Hans: “提交受治理任务”返回的任务 UUID。
+    llm_description: Use the exact job_id returned by submit_governed_job. Never invent it.
+
+extra:
+  python:
+    source: tools/get_job.py
+
+output_schema:
+  type: object
+  properties:
+    job_id:
+      type: string
+      description: BailingHub job UUID.
+    request_id:
+      type: string
+      description: Client-scoped idempotency key associated with the job.
+    status:
+      type: string
+      description: queued, running, dispatched, done, error, or rejected.
+    terminal:
+      type: boolean
+      description: Whether the job reached done, error, or rejected.
+    route:
+      type: string
+      description: The governed route associated with the job, when returned.
+    target:
+      type: string
+      description: The resolved target, when returned.
+    result:
+      type: object
+      description: The business result when the job completed successfully.
+    error:
+      type: string
+      description: A sanitized failure reason when the job failed or was rejected.

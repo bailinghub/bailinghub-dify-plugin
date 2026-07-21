@@ -1,0 +1,31 @@
+version: 0.1.0
+type: plugin
+author: niejingchuan
+name: bailinghub
+label:
+  en_US: BailingHub
+  zh_Hans: BailingHub 百灵中枢
+description:
+  en_US: Submit and inspect governed business actions through a self-hosted BailingHub control plane.
+  zh_Hans: 通过自部署的 BailingHub 百灵中枢提交并查询受治理的业务操作。
+icon: icon.svg
+tags:
+  - business
+  - productivity
+resource:
+  memory: 67108864
+  permission: {}
+plugins:
+  tools:
+    - provider/bailinghub.yaml
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+created_at: "2026-07-21T00:00:00+08:00"
+privacy: PRIVACY.md

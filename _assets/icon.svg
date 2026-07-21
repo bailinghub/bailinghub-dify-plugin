@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="BailingHub">
+  <rect width="256" height="256" rx="40" fill="#0c1210"/>
+  <path fill="#39d98a" d="M48 50h68L84 83H48V50Zm0 58h36l45 48-32 34-49-52v-30Z"/>
+  <path fill="#f4f8f6" d="M208 50h-68l32 33h36V50Zm0 58h-36l-45 48 32 34 49-52v-30Z"/>
+</svg>

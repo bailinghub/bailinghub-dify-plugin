@@ -1,0 +1,50 @@
+identity:
+  author: niejingchuan
+  name: bailinghub
+  label:
+    en_US: BailingHub
+    zh_Hans: BailingHub 百灵中枢
+  description:
+    en_US: Govern business actions from Dify through your self-hosted BailingHub instance.
+    zh_Hans: 让 Dify 通过您自部署的 BailingHub 百灵中枢执行受治理的业务操作。
+  icon: icon.svg
+  tags:
+    - business
+    - productivity
+
+credentials_for_provider:
+  base_url:
+    label:
+      en_US: BailingHub Base URL
+      zh_Hans: BailingHub 服务地址
+    placeholder:
+      en_US: https://hub.example.com
+      zh_Hans: https://hub.example.com
+    help:
+      en_US: Use the HTTPS origin of your self-hosted BailingHub instance, without a trailing slash.
+      zh_Hans: 填写自部署 BailingHub 的 HTTPS 地址，不带末尾斜杠。
+    required: true
+    type: text-input
+    url: https://github.com/bailinghub/bailinghub/blob/main/docs/integrations/dify/README.en.md
+  client_token:
+    label:
+      en_US: Dedicated Client Token
+      zh_Hans: 专用接入方令牌
+    placeholder:
+      en_US: Paste a dedicated BailingHub Client Token
+      zh_Hans: 粘贴专用于 Dify 的 BailingHub Client Token
+    help:
+      en_US: Use a route-scoped Client Token. Never use an admin, executor, or business-system credential.
+      zh_Hans: 仅使用配置了路由白名单的接入方令牌，不要使用管理员、执行器或业务系统密钥。
+    required: true
+    type: secret-input
+    url: https://github.com/bailinghub/bailinghub/blob/main/docs/integrations/dify/README.en.md
+
+tools:
+  - tools/submit_governed_job.yaml
+  - tools/get_job.yaml
+  - tools/wait_for_job.yaml
+
+extra:
+  python:
+    source: provider/bailinghub.py

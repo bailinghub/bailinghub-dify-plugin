@@ -1,0 +1,89 @@
+identity:
+  name: wait_for_job
+  author: niejingchuan
+  label:
+    en_US: Wait for Governed Job
+    zh_Hans: 等待受治理任务
+  icon: icon.svg
+
+description:
+  human:
+    en_US: Poll a BailingHub job for a bounded period and return its latest state.
+    zh_Hans: 在限定时间内轮询 BailingHub 任务并返回最新状态。
+  llm: >-
+    Wait briefly for a BailingHub job. This tool never waits indefinitely. If wait_timed_out
+    is true, preserve the same job_id and check it again later; do not submit a replacement job.
+
+parameters:
+  - name: job_id
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Job ID
+      zh_Hans: 任务标识
+    human_description:
+      en_US: The job UUID returned by Submit Governed Job.
+      zh_Hans: “提交受治理任务”返回的任务 UUID。
+    llm_description: Use the exact job_id returned by submit_governed_job. Never invent it.
+  - name: max_wait_seconds
+    type: number
+    required: false
+    default: 20
+    min: 1
+    max: 60
+    form: form
+    label:
+      en_US: Maximum Wait
+      zh_Hans: 最长等待时间
+    human_description:
+      en_US: Maximum seconds to poll before returning the latest non-terminal state.
+      zh_Hans: 返回最新非终态结果前，允许轮询的最长秒数。
+  - name: poll_interval_seconds
+    type: number
+    required: false
+    default: 2
+    min: 0.5
+    max: 10
+    form: form
+    label:
+      en_US: Poll Interval
+      zh_Hans: 轮询间隔
+    human_description:
+      en_US: Seconds between status checks.
+      zh_Hans: 两次任务状态查询之间的秒数。
+
+extra:
+  python:
+    source: tools/wait_for_job.py
+
+output_schema:
+  type: object
+  properties:
+    job_id:
+      type: string
+      description: BailingHub job UUID.
+    request_id:
+      type: string
+      description: Client-scoped idempotency key associated with the job.
+    status:
+      type: string
+      description: Latest known job status.
+    terminal:
+      type: boolean
+      description: Whether the job reached done, error, or rejected.
+    wait_timed_out:
+      type: boolean
+      description: Whether the bounded wait ended before the job became terminal.
+    route:
+      type: string
+      description: The governed route associated with the job, when returned.
+    target:
+      type: string
+      description: The resolved target, when returned.
+    result:
+      type: object
+      description: The business result when the job completed successfully.
+    error:
+      type: string
+      description: A sanitized failure reason when the job failed or was rejected.
