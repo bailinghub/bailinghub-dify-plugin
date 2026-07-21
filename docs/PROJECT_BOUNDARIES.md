@@ -22,6 +22,22 @@ version, changelog, tests, packages, issues, and release process.
 | Dify runtime behavior and plugin SDK | Dify |
 | Private deployment configuration or credentials | Deploying organization |
 
+## Asset Placement Matrix
+
+Keep every change in the layer that owns its semantics and lifecycle.
+
+| Asset | Location | Visibility | Release lifecycle |
+| --- | --- | --- | --- |
+| Portable governance semantics and conformance | ACC repository | Public | ACC only |
+| Control-plane APIs, runtime enforcement, and server behavior | BailingHub repository | Public | BailingHub only |
+| Dify manifests, tools, packaging, and adapter tests | This repository | Public | This adapter only |
+| Dify workflows, test routes, credentials, request IDs, and E2E evidence | Deploying organization's operations store | Private | Organization-managed |
+
+Public examples must use placeholders and harmless routes. A working internal workflow is
+evidence that the adapter can be operated; it is not a distributable part of the adapter.
+Do not copy private workflow exports, deployment URLs, tokens, account identifiers, or raw
+run evidence into this repository.
+
 ## Dependency Direction
 
 The dependency direction is deliberately one-way.
@@ -50,3 +66,5 @@ optional integration, but the adapter is not part of the BailingHub server relea
 - A `/run` or `/jobs/{job_id}` contract issue is fixed in BailingHub first, then reflected
   in this adapter's compatibility matrix.
 - A governance field or portable semantic proposal is discussed in ACC, not here.
+- An internal workflow, route, credential, or verification-record change stays in the
+  deploying organization's private operations store and is never released with the plugin.
