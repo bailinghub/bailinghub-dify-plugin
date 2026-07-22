@@ -33,6 +33,11 @@ Dify Agent 或 Workflow
 依赖方向只有一个：本插件消费 BailingHub 对外公开的 Client API。详见
 [项目边界](../docs/PROJECT_BOUNDARIES.md)和[兼容策略](../docs/COMPATIBILITY.md)。
 
+## 获取插件
+
+- 推荐：[从 Dify Marketplace 安装 BailingHub](https://marketplace.dify.ai/plugin/bailinghub/bailinghub)；
+- 离线安装或固定版本：从[独立插件仓库 Releases](https://github.com/bailinghub/bailinghub-dify-plugin/releases)下载对应 `.difypkg`。
+
 ## 使用前提
 
 - Dify 支持工具插件；
@@ -44,7 +49,7 @@ Dify Agent 或 Workflow
 
 1. 在 BailingHub 中为当前 Dify 应用创建独立接入方。
 2. 只放行 Dify 确实需要的路由，并设置合理限流。
-3. 在 Dify 安装本插件。
+3. 从 Dify Marketplace 安装本插件，或上传 Releases 中的固定版本安装包。
 4. 配置：
    - `BailingHub 服务地址`：BailingHub 的 HTTPS 根地址；
    - `专用接入方令牌`：原始 Client Token，不要重复填写 `Bearer`。

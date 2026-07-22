@@ -26,6 +26,7 @@ Dify Agent or Workflow
 
 ## Source and Support
 
+- Marketplace: [Install BailingHub from Dify Marketplace](https://marketplace.dify.ai/plugin/bailinghub/bailinghub)
 - Source: [github.com/bailinghub/bailinghub-dify-plugin](https://github.com/bailinghub/bailinghub-dify-plugin)
 - Bug reports and support: [GitHub Issues](https://github.com/bailinghub/bailinghub-dify-plugin/issues)
 - Security reports: use this repository's private Security Advisory channel as described in
@@ -55,7 +56,7 @@ See [Project Boundaries](docs/PROJECT_BOUNDARIES.md) and
 
 1. In BailingHub, create a dedicated client for this Dify application.
 2. Allow only the required routes and set an appropriate rate limit.
-3. Install this plugin in Dify.
+3. [Install BailingHub from Dify Marketplace](https://marketplace.dify.ai/plugin/bailinghub/bailinghub). For offline or pinned-package installation, use a versioned package from this repository's Releases.
 4. Configure:
    - `BailingHub Base URL`: the BailingHub HTTPS origin;
    - `Dedicated Client Token`: the raw client token, without a `Bearer` prefix.
