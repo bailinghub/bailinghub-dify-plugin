@@ -23,6 +23,17 @@ jobs:
       - run: uv run ruff format --check .
       - run: uv run pytest
       - run: uv run python scripts/check_project.py
+      - name: Check current BailingHub Client API contract
+        env:
+          BAILING_CLIENT_API_CORE_REF: ${{ github.head_ref || github.ref_name }}
+        run: |
+          if git ls-remote --exit-code --heads https://github.com/bailinghub/bailinghub.git "$BAILING_CLIENT_API_CORE_REF" >/dev/null 2>&1; then
+            git clone --depth 1 --branch "$BAILING_CLIENT_API_CORE_REF" https://github.com/bailinghub/bailinghub.git /tmp/bailinghub-core
+          else
+            git clone --depth 1 https://github.com/bailinghub/bailinghub.git /tmp/bailinghub-core
+          fi
+          uv run python scripts/check_client_api_contract.py \
+            --contract-dir /tmp/bailinghub-core/contracts/client-api/v1
       - name: Package with the pinned Dify Plugin CLI
         env:
           DIFY_PLUGIN_CLI_VERSION: 0.6.5

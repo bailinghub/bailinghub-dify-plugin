@@ -17,11 +17,18 @@ endpoint is used.
 
 | Adapter version | BailingHub requirement | Dify runtime | Python |
 | --- | --- | --- | --- |
-| `0.1.x` | Client API with `/run` and `/jobs/{job_id}` | Tool Plugin support | `3.12` |
+| `0.1.x` | `bailing.client-api.v1` | Tool Plugin support | `3.12` |
 
 This matrix records protocol compatibility, not release coupling. A BailingHub release is
 compatible when the documented request and response semantics remain valid, regardless of
 whether its version number resembles the plugin version.
+
+The machine-readable adapter claim lives at `compatibility/client-api.json`. CI checks it
+against the current BailingHub core contract with
+`scripts/check_client_api_contract.py`; core CI also checks this adapter before accepting a
+Client API change. The gate verifies endpoint method, path, authentication shape, request
+limits, consumed fields, statuses, and classified HTTP failures rather than relying on a
+version label alone.
 
 ## Job Semantics
 

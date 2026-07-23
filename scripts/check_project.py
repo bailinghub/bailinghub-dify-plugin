@@ -83,11 +83,17 @@ def check_plugin_graph() -> None:
 
 
 def check_security_boundary() -> None:
+    require_file("compatibility/client-api.json")
+    require_file("scripts/check_client_api_contract.py")
     client_source = require_file("tools/_client.py").read_text(encoding="utf-8")
     for forbidden in FORBIDDEN_CLIENT_PATHS:
         if forbidden in client_source:
             raise AssertionError(f"HTTP client must not reference privileged path {forbidden}")
-    for required in ('"/health"', '"/run"', 'f"/jobs/{'):
+    for required in (
+        '"path": "/health"',
+        '"path": "/run"',
+        '"path": "/jobs/{job_id}"',
+    ):
         if required not in client_source:
             raise AssertionError(f"HTTP client is missing expected public surface {required}")
 
