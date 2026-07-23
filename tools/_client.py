@@ -12,8 +12,30 @@ import requests
 DEFAULT_CONNECT_TIMEOUT = 5.0
 DEFAULT_READ_TIMEOUT = 30.0
 MAX_RESPONSE_BYTES = 1024 * 1024
-TERMINAL_STATUSES = frozenset({"done", "error", "rejected"})
-KNOWN_STATUSES = frozenset({"queued", "running", "dispatched", *TERMINAL_STATUSES})
+CLIENT_API_LIMITS = {
+    "request_id_max_length": 128,
+    "route_max_length": 64,
+    "input_max_length": 100_000,
+    "response_max_bytes": MAX_RESPONSE_BYTES,
+}
+CLIENT_API_ENDPOINTS = {
+    "health": {"method": "GET", "path": "/health", "authentication": "none"},
+    "run.submit": {"method": "POST", "path": "/run", "authentication": "bearer"},
+    "jobs.get": {
+        "method": "GET",
+        "path": "/jobs/{job_id}",
+        "authentication": "bearer",
+    },
+}
+CLIENT_API_TERMINAL_STATUSES = ("done", "error", "rejected")
+CLIENT_API_KNOWN_STATUSES = (
+    "queued",
+    "running",
+    "dispatched",
+    *CLIENT_API_TERMINAL_STATUSES,
+)
+TERMINAL_STATUSES = frozenset(CLIENT_API_TERMINAL_STATUSES)
+KNOWN_STATUSES = frozenset(CLIENT_API_KNOWN_STATUSES)
 _ROUTE_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_-]{1,63}$")
 _JOB_ID_PATTERN = re.compile(
     r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
@@ -86,25 +108,41 @@ class BailingHubClient:
         )
 
     def validate_credentials(self) -> None:
-        health = self._request("GET", "/health", authenticated=False)
+        endpoint = CLIENT_API_ENDPOINTS["health"]
+        health = self._request(endpoint["method"], endpoint["path"], authenticated=False)
         if not isinstance(health.get("status"), str):
             raise BailingHubClientError(
                 "The configured URL did not return a BailingHub health response."
             )
 
         sentinel = "00000000-0000-0000-0000-000000000000"
-        self._request("GET", f"/jobs/{sentinel}", allowed_statuses={404})
+        endpoint = CLIENT_API_ENDPOINTS["jobs.get"]
+        path = endpoint["path"].replace("{job_id}", sentinel)
+        self._request(endpoint["method"], path, allowed_statuses={404})
 
     def submit_job(self, *, request_id: Any, route: Any, input_text: Any) -> dict[str, Any]:
-        normalized_request_id = require_non_empty(request_id, "request_id", max_length=128)
-        normalized_route = require_non_empty(route, "route", max_length=64)
-        normalized_input = require_non_empty(input_text, "input", max_length=100_000)
+        normalized_request_id = require_non_empty(
+            request_id,
+            "request_id",
+            max_length=CLIENT_API_LIMITS["request_id_max_length"],
+        )
+        normalized_route = require_non_empty(
+            route,
+            "route",
+            max_length=CLIENT_API_LIMITS["route_max_length"],
+        )
+        normalized_input = require_non_empty(
+            input_text,
+            "input",
+            max_length=CLIENT_API_LIMITS["input_max_length"],
+        )
         if not _ROUTE_PATTERN.fullmatch(normalized_route):
             raise ValueError("route must match ^[a-z0-9][a-z0-9_-]{1,63}$.")
 
+        endpoint = CLIENT_API_ENDPOINTS["run.submit"]
         body = self._request(
-            "POST",
-            "/run",
+            endpoint["method"],
+            endpoint["path"],
             json_body={
                 "request_id": normalized_request_id,
                 "route": normalized_route,
@@ -118,7 +156,9 @@ class BailingHubClient:
         normalized_job_id = require_non_empty(job_id, "job_id", max_length=36)
         if not _JOB_ID_PATTERN.fullmatch(normalized_job_id):
             raise ValueError("job_id must be a UUID returned by BailingHub.")
-        body = self._request("GET", f"/jobs/{normalized_job_id}")
+        endpoint = CLIENT_API_ENDPOINTS["jobs.get"]
+        path = endpoint["path"].replace("{job_id}", normalized_job_id)
+        body = self._request(endpoint["method"], path)
         return self._normalize_job(body)
 
     def wait_for_job(
@@ -165,7 +205,7 @@ class BailingHubClient:
             raise BailingHubClientError("BailingHub returned an invalid job response.")
         if require_request_id and not request_id:
             raise BailingHubClientError("BailingHub returned a job without request_id.")
-        if len(request_id) > 128:
+        if len(request_id) > CLIENT_API_LIMITS["request_id_max_length"]:
             raise BailingHubClientError("BailingHub returned an invalid request_id.")
 
         normalized: dict[str, Any] = {
@@ -203,7 +243,7 @@ class BailingHubClient:
         expected = allowed_statuses or {200}
         headers = {
             "Accept": "application/json",
-            "User-Agent": "bailinghub-dify-plugin/0.1.0",
+            "User-Agent": "bailinghub-dify-plugin/0.1.2",
         }
         if authenticated:
             headers["Authorization"] = f"Bearer {self.client_token}"

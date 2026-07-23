@@ -2,11 +2,16 @@ from __future__ import annotations
 
 import json
 from collections.abc import Iterable
+from pathlib import Path
 from typing import Any
 
 import pytest
 
 from tools._client import (
+    CLIENT_API_ENDPOINTS,
+    CLIENT_API_KNOWN_STATUSES,
+    CLIENT_API_LIMITS,
+    CLIENT_API_TERMINAL_STATUSES,
     MAX_RESPONSE_BYTES,
     BailingHubClient,
     BailingHubClientError,
@@ -14,6 +19,7 @@ from tools._client import (
 )
 
 JOB_ID = "11111111-1111-4111-8111-111111111111"
+ROOT = Path(__file__).resolve().parents[1]
 
 
 class FakeResponse:
@@ -43,6 +49,14 @@ class FakeSession:
 def client(*responses: FakeResponse) -> tuple[BailingHubClient, FakeSession]:
     session = FakeSession(*responses)
     return BailingHubClient("https://hub.example.com", "secret-token", session=session), session
+
+
+def test_client_api_compatibility_declaration_matches_adapter_code() -> None:
+    declaration = json.loads((ROOT / "compatibility/client-api.json").read_text(encoding="utf-8"))
+    assert declaration["endpoint_contracts"] == CLIENT_API_ENDPOINTS
+    assert declaration["known_job_statuses"] == list(CLIENT_API_KNOWN_STATUSES)
+    assert declaration["terminal_job_statuses"] == list(CLIENT_API_TERMINAL_STATUSES)
+    assert declaration["limits"] == CLIENT_API_LIMITS
 
 
 def test_normalize_base_url_requires_https_except_loopback() -> None:
