@@ -78,6 +78,19 @@ query the same `job_id` later. Do not submit a replacement action. When retrying
 same business request, reuse the same `request_id` without changing its meaning or
 arguments.
 
+## First Success and Feedback
+
+Use the [Dify integration path](https://www.bailinghub.com/en/integrations#dify) as the
+canonical start page. The first integration is successful when a job submitted through
+the configured route reaches a terminal state under the same `job_id`, BailingHub retains
+its approval and audit state, and Dify never receives administrator or business-system
+credentials.
+
+Report a PASS, partial result, or failure through the
+[BailingHub independent validation form](https://github.com/bailinghub/bailinghub/issues/new?template=independent_validation.yml)
+and select the Dify track. Never include tokens, model keys, personal information, or
+production business data.
+
 ## Security Model
 
 - Route choice is constrained again by the BailingHub client allowlist.

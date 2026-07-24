@@ -68,6 +68,16 @@ Dify Agent 或 Workflow
 `queued`、`running`、`dispatched` 都不是终态。等待超时后应继续查询同一个 `job_id`，
 不要重新创建任务。重试同一业务请求时，应复用同一个 `request_id`，且不得改变请求含义和参数。
 
+## 首次成功与反馈
+
+请从[官网 Dify 接入路径](https://www.bailinghub.com/integrations#dify)开始。首次接入成功的客观标准是：
+任务通过已配置路由提交后，在同一个 `job_id` 下到达终态；BailingHub 保留对应审批与审计状态；
+Dify 全程没有获得管理员凭据或业务系统凭据。
+
+无论 PASS、部分通过还是失败，都可以通过
+[BailingHub 独立验证模板](https://github.com/bailinghub/bailinghub/issues/new?template=independent_validation.yml)
+选择 Dify 路径反馈。不要提交 Token、模型 Key、个人信息或生产业务数据。
+
 ## 安全边界
 
 - BailingHub 会再次使用接入方路由白名单约束路由。
