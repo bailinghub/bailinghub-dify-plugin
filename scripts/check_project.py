@@ -19,8 +19,7 @@ FORBIDDEN_CLIENT_PATHS = (
 )
 WORKFLOW_EXAMPLE = "examples/workflows/bailinghub-governed-job.yml"
 BAILINGHUB_PLUGIN_IDENTIFIER = (
-    "bailinghub/bailinghub:0.1.2@"
-    "649ec051eeec350fca9cad7a47f8c1aa3fda8a1253c901f6f56560c4afd5d4d4"
+    "bailinghub/bailinghub:0.1.2@649ec051eeec350fca9cad7a47f8c1aa3fda8a1253c901f6f56560c4afd5d4d4"
 )
 
 

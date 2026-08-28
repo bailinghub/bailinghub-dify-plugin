@@ -49,9 +49,7 @@ def test_public_workflow_example_is_deterministic_and_secret_free() -> None:
             encoding="utf-8"
         )
     )
-    nodes = {
-        node["id"]: node["data"] for node in workflow["workflow"]["graph"]["nodes"]
-    }
+    nodes = {node["id"]: node["data"] for node in workflow["workflow"]["graph"]["nodes"]}
     assert [nodes[node_id]["type"] for node_id in ("start", "submit", "wait", "end")] == [
         "start",
         "tool",
