@@ -43,6 +43,30 @@ def test_project_boundary_check_passes() -> None:
     assert result.stdout.startswith("PASS:")
 
 
+def test_public_workflow_example_is_deterministic_and_secret_free() -> None:
+    workflow = yaml.safe_load(
+        (ROOT / "examples" / "workflows" / "bailinghub-governed-job.yml").read_text(
+            encoding="utf-8"
+        )
+    )
+    nodes = {
+        node["id"]: node["data"] for node in workflow["workflow"]["graph"]["nodes"]
+    }
+    assert [nodes[node_id]["type"] for node_id in ("start", "submit", "wait", "end")] == [
+        "start",
+        "tool",
+        "tool",
+        "end",
+    ]
+    assert nodes["submit"]["tool_parameters"]["request_id"]["value"] == (
+        "dify:{{#sys.workflow_run_id#}}:submit"
+    )
+    assert nodes["wait"]["tool_parameters"]["job_id"]["value"] == "{{#submit.job_id#}}"
+    assert nodes["submit"]["tool_configurations"]["route"]["value"] == (
+        "replace-with-a-client-allowed-route"
+    )
+
+
 def test_package_audit_rejects_environment_files(tmp_path: Path) -> None:
     package = tmp_path / "invalid.difypkg"
     with zipfile.ZipFile(package, "w") as archive:

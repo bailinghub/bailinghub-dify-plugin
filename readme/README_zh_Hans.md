@@ -68,6 +68,11 @@ Dify Agent 或 Workflow
 `queued`、`running`、`dispatched` 都不是终态。等待超时后应继续查询同一个 `job_id`，
 不要重新创建任务。重试同一业务请求时，应复用同一个 `request_id`，且不得改变请求含义和参数。
 
+仓库提供了一个不依赖模型、可导入的示例：
+[`examples/workflows/bailinghub-governed-job.yml`](../examples/workflows/bailinghub-governed-job.yml)。
+它只提交一次任务，做一次有界等待，并输出同一个 `job_id` 和最新状态。运行前必须把路由占位符
+替换为专用 Client Token 已放行的路由。详见[工作流示例说明](../examples/workflows/README.zh-CN.md)。
+
 ## 首次成功与反馈
 
 请从[官网 Dify 接入路径](https://www.bailinghub.com/integrations#dify)开始。首次接入成功的客观标准是：
