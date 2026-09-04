@@ -89,6 +89,12 @@ query the same `job_id` later. Do not submit a replacement action. When retrying
 same business request, reuse the same `request_id` without changing its meaning or
 arguments.
 
+An importable, model-free example is available at
+[`examples/workflows/bailinghub-governed-job.yml`](examples/workflows/bailinghub-governed-job.yml).
+It submits once, waits for a bounded period, and returns the same `job_id` and latest state.
+Before running it, replace the route placeholder with a route allowed by the dedicated Client
+Token. See the [workflow example guide](examples/workflows/README.md).
+
 ## First Success and Feedback
 
 Use the [Dify integration path](https://www.bailinghub.com/en/integrations#dify) as the

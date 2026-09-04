@@ -1,4 +1,5 @@
 .env*
+.git
 .git/
 .github/
 .gitignore
@@ -14,6 +15,7 @@ SECURITY.md
 compatibility/
 dist/
 docs/
+examples/
 scripts/
 tests/
 uv.lock

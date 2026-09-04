@@ -31,12 +31,14 @@ Keep every change in the layer that owns its semantics and lifecycle.
 | Portable governance semantics and conformance | ACC repository | Public | ACC only |
 | Control-plane APIs, runtime enforcement, and server behavior | BailingHub repository | Public | BailingHub only |
 | Dify manifests, tools, packaging, and adapter tests | This repository | Public | This adapter only |
-| Dify workflows, test routes, credentials, request IDs, and E2E evidence | Deploying organization's operations store | Private | Organization-managed |
+| Generic Dify workflow templates containing only placeholders | This repository | Public | Adapter-managed |
+| Deployer-configured workflows, test routes, credentials, request IDs, and E2E evidence | Deploying organization's operations store | Private | Organization-managed |
 
-Public examples must use placeholders and harmless routes. A working internal workflow is
-evidence that the adapter can be operated; it is not a distributable part of the adapter.
-Do not copy private workflow exports, deployment URLs, tokens, account identifiers, or raw
-run evidence into this repository.
+Public templates must use placeholders and harmless routes, must not embed model credentials,
+and must preserve the adapter's documented job lifecycle. A working internal workflow is
+evidence that the adapter can be operated; it is not itself a distributable artifact. Do not
+copy private workflow exports, deployment URLs, tokens, account identifiers, or raw run evidence
+into this repository.
 
 ## Dependency Direction
 

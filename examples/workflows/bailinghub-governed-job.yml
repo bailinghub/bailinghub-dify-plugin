@@ -1,0 +1,274 @@
+app:
+  description: Submit one governed business action to BailingHub and wait for its latest state without using an LLM.
+  icon: 🛡️
+  icon_background: '#E8F8FB'
+  icon_type: emoji
+  mode: workflow
+  name: BailingHub Governed Job
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: bailinghub/bailinghub:0.1.2@649ec051eeec350fca9cad7a47f8c1aa3fda8a1253c901f6f56560c4afd5d4d4
+    version: null
+kind: app
+version: 0.6.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      enabled: false
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: tool
+      id: start-source-submit-target
+      source: start
+      sourceHandle: source
+      target: submit
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: tool
+      id: submit-source-wait-target
+      source: submit
+      sourceHandle: source
+      target: wait
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: end
+      id: wait-source-end-target
+      source: wait
+      sourceHandle: source
+      target: end
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: Business request
+        type: start
+        variables:
+        - default: ''
+          hint: Describe one harmless business action for the configured route.
+          label: Business request
+          max_length: 4000
+          options: []
+          placeholder: Query a non-sensitive test record.
+          required: true
+          type: paragraph
+          variable: business_request
+      height: 109
+      id: start
+      position:
+        x: 30
+        y: 220
+      positionAbsolute:
+        x: 30
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        desc: Submit exactly one business request through a fixed BailingHub route.
+        is_team_authorization: true
+        output_schema:
+          type: object
+          properties:
+            job_id:
+              type: string
+            request_id:
+              type: string
+            route:
+              type: string
+            status:
+              type: string
+            target:
+              type: string
+            terminal:
+              type: boolean
+        plugin_id: bailinghub/bailinghub
+        plugin_unique_identifier: bailinghub/bailinghub:0.1.2@649ec051eeec350fca9cad7a47f8c1aa3fda8a1253c901f6f56560c4afd5d4d4
+        provider_id: bailinghub/bailinghub/bailinghub
+        provider_name: bailinghub/bailinghub/bailinghub
+        provider_type: builtin
+        selected: false
+        title: Submit governed job
+        tool_configurations:
+          route:
+            type: constant
+            value: replace-with-a-client-allowed-route
+        tool_description: Submit a business action through a configured BailingHub route.
+        tool_label: Submit Governed Job
+        tool_name: submit_governed_job
+        tool_node_version: '2'
+        tool_parameters:
+          input:
+            type: mixed
+            value: '{{#start.business_request#}}'
+          request_id:
+            type: mixed
+            value: dify:{{#sys.workflow_run_id#}}:submit
+        type: tool
+      height: 142
+      id: submit
+      position:
+        x: 332
+        y: 220
+      positionAbsolute:
+        x: 332
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        desc: Wait for a bounded period and preserve the submitted job identifier.
+        is_team_authorization: true
+        output_schema:
+          type: object
+          properties:
+            error:
+              type: string
+            job_id:
+              type: string
+            request_id:
+              type: string
+            result:
+              type: object
+            route:
+              type: string
+            status:
+              type: string
+            target:
+              type: string
+            terminal:
+              type: boolean
+            wait_timed_out:
+              type: boolean
+        plugin_id: bailinghub/bailinghub
+        plugin_unique_identifier: bailinghub/bailinghub:0.1.2@649ec051eeec350fca9cad7a47f8c1aa3fda8a1253c901f6f56560c4afd5d4d4
+        provider_id: bailinghub/bailinghub/bailinghub
+        provider_name: bailinghub/bailinghub/bailinghub
+        provider_type: builtin
+        selected: false
+        title: Wait for governed job
+        tool_configurations:
+          max_wait_seconds:
+            type: constant
+            value: 20
+          poll_interval_seconds:
+            type: constant
+            value: 2
+        tool_description: Poll a BailingHub job for a bounded period.
+        tool_label: Wait for Governed Job
+        tool_name: wait_for_job
+        tool_node_version: '2'
+        tool_parameters:
+          job_id:
+            type: mixed
+            value: '{{#submit.job_id#}}'
+        type: tool
+      height: 142
+      id: wait
+      position:
+        x: 634
+        y: 220
+      positionAbsolute:
+        x: 634
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - wait
+          - job_id
+          value_type: string
+          variable: job_id
+        - value_selector:
+          - wait
+          - request_id
+          value_type: string
+          variable: request_id
+        - value_selector:
+          - wait
+          - status
+          value_type: string
+          variable: status
+        - value_selector:
+          - wait
+          - terminal
+          value_type: boolean
+          variable: terminal
+        - value_selector:
+          - wait
+          - wait_timed_out
+          value_type: boolean
+          variable: wait_timed_out
+        - value_selector:
+          - wait
+          - result
+          value_type: object
+          variable: result
+        - value_selector:
+          - wait
+          - error
+          value_type: string
+          variable: error
+        selected: false
+        title: Latest job state
+        type: end
+      height: 246
+      id: end
+      position:
+        x: 936
+        y: 220
+      positionAbsolute:
+        x: 936
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 0
+      y: 0
+      zoom: 0.8
+  rag_pipeline_variables: []
