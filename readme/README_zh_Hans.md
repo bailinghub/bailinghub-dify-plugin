@@ -1,7 +1,17 @@
 # BailingHub 百灵中枢 Dify 工具插件
 
-让 Dify Agent 或 Workflow 通过自部署的
-[BailingHub 百灵中枢](https://github.com/bailinghub/bailinghub)提交业务操作。
+让 Dify Agent 或 Workflow 查询和操作已经接入自部署
+[BailingHub 百灵中枢](https://github.com/bailinghub/bailinghub)的商城、SaaS、CRM、ERP
+或其他业务后台。
+
+具体能做什么，取决于业务系统主动声明的能力，以及管理员为当前 Dify 连接放行的路由。例如：
+
+- 找出低库存商品并生成补货建议；
+- 根据 Dify 表单或对话修改员工、客户资料；
+- 发起订单退款，并在需要时由 BailingHub 暂停等待人工审批。
+
+Dify 只负责提交请求和读取结果，不会拿到管理员、执行器或业务系统凭据。BailingHub 保留
+路由限制、审批状态和审计轨迹，最终能否执行仍由业务系统判断。
 
 插件只暴露三个控制面工具：
 
@@ -9,7 +19,7 @@
 - `get_job`：查询任务当前状态和终态结果；
 - `wait_for_job`：在限定时间内轮询任务，不无限占用工作流。
 
-它不会把受治理的业务 API 直接导入 Dify，也不会把管理员、执行器或业务系统凭证交给 Dify。
+它不会把受治理的业务 API 直接导入 Dify。
 
 ```text
 Dify Agent 或 Workflow

@@ -1,7 +1,7 @@
 [project]
 name = "bailinghub-dify-plugin"
 version = "0.1.2"
-description = "Dify Tool Plugin for a self-hosted BailingHub control plane"
+description = "Let Dify Agents and Workflows operate permitted business systems through BailingHub"
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "Apache-2.0" }

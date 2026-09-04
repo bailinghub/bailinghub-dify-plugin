@@ -5,8 +5,8 @@ identity:
     en_US: BailingHub
     zh_Hans: BailingHub 百灵中枢
   description:
-    en_US: Govern business actions from Dify through your self-hosted BailingHub instance.
-    zh_Hans: 让 Dify 通过您自部署的 BailingHub 百灵中枢执行受治理的业务操作。
+    en_US: Let Dify query and operate permitted business-system capabilities through your self-hosted BailingHub.
+    zh_Hans: 让 Dify 通过您自部署的 BailingHub 查询并操作业务系统已开放的能力。
   icon: icon.svg
   tags:
     - business

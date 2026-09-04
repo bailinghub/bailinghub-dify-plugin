@@ -1,7 +1,19 @@
 # BailingHub Tool Plugin for Dify
 
-Use a Dify Agent or Workflow to submit business actions through a self-hosted
-[BailingHub](https://github.com/bailinghub/bailinghub) control plane.
+Let a Dify Agent or Workflow query and operate a store, SaaS, CRM, ERP, or other business
+system already connected to a self-hosted
+[BailingHub](https://github.com/bailinghub/bailinghub) deployment.
+
+Depending on the capabilities exposed by the business system and the routes allowed for the
+Dify connection, you can build flows such as:
+
+- find low-stock products and prepare a restocking suggestion;
+- update an employee or customer profile from a Dify form or conversation;
+- submit a refund request and let BailingHub pause it when human approval is required.
+
+Dify submits the request and reads its result; it never receives administrator, executor, or
+business-system credentials. BailingHub keeps the route restrictions, approval state, and
+audit trail, while the business system makes the final authorization decision.
 
 The plugin intentionally exposes only three control-plane tools:
 
@@ -9,8 +21,7 @@ The plugin intentionally exposes only three control-plane tools:
 - `get_job`: read the current state and terminal result of a job;
 - `wait_for_job`: poll a job for a bounded period without waiting indefinitely.
 
-It does not import governed business APIs into Dify and does not give Dify admin,
-executor, or business-system credentials.
+It does not import governed business APIs directly into Dify.
 
 ```text
 Dify Agent or Workflow
